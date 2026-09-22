@@ -28,6 +28,7 @@
     ![](./imagenes/captura6.png)
 
     Escribes s3 en el buscador superior y seleccionas s3
+    y le das un nombre y luego a crear
 
     ![](./imagenes/captura7.png)
 
