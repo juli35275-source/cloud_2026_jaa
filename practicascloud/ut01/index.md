@@ -26,3 +26,11 @@
     primero tienes que acceder a tu laboratorio, pienchando en WAS cuando este esté en verde
 
     ![](./imagenes/captura6.png)
+
+    Escribes s3 en el buscador superior y seleccionas s3
+
+    ![](./imagenes/captura7.png)
+
+    para abrir boto 3 usamos este comando desde jypiter 
+    ![](./imagenes/boto3.png)
+    recomendaria usar el cli normalmente y desde python lo recomendaria usar cuando no dispongas de un cli desde el que conectarte ya que requiere levantar el servicio de jupiter desde python meintras que el otro solo es el escribir el comando directamente en el cli, aunque si teines una red que no lo permite pues es más comodo desde jupiter que levantar el laboratorio de aws.
