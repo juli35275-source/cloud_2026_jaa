@@ -19,7 +19,9 @@ Luego sales del bucket que acabas de crear y vas a esta imagen
 haces click en editar y desmarcas bloquear a todo el mundo y le as a guardar cambios
 Despues vas a Politica del bucket y le das a editar y pones esto en la política 
 
+
 ![](./imagenes/politica%20del%20bucket.png)
+
 
 Para restringir por ip tengo que ir de nuevo  la política del bucket y editarla poniendo esto
 ```json
