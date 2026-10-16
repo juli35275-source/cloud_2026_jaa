@@ -130,3 +130,30 @@ Localizar el cuadro de texto User data al final de la página y pegar el script 
 
 
 Pulsar en Launch instance.
+
+con este comando nos conectamos a traves del cloudshell
+
+
+```
+~ $ ssh -i "clavesjulian.pem" ec2-user@100.53.121.134
+```
+
+Inspeccionar el registro de salida de arranque:
+
+
+```
+ sudo cat /var/log/cloud-init-output.log
+```
+
+
+Comprobar manualmente la consulta a IMDSv2 desde la propia terminal:
+
+
+```
+ # Obtener el token
+  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
+
+  # Consultar el AMI ID utilizado para lanzar la máquina
+  curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/ami-id
+  echo ""
+```
