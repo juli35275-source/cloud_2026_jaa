@@ -1,2 +1,3 @@
 ## practica de cloud
-- [practica1](./practicascloud/ut01/index.md)
+- [practicas1](./practicascloud/ut01/index.md)
+- [practicas2](./practicascloud/ut02/index.md)
