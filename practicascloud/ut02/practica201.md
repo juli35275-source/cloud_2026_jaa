@@ -8,7 +8,7 @@ Security group name: sg-servidor-web-asir
 Description: Permitir acceso HTTP publico y SSH desde el aula
 
 
-[](./imagenes/creargrupo1.png)
+![](./imagenes/creargrupo1.png)
 
 
 VPC: Seleccionar la VPC por defecto del laboratorio.
@@ -20,7 +20,7 @@ Dejar las reglas de salida (Outbound rules) por defecto (todo el tráfico permit
 Guardar pulsando en Create security group.
 
 
-[](./imagenes/creargrupofinal.png)
+![](./imagenes/creargrupofinal.png)
 
 
 paso 2. 
@@ -99,13 +99,13 @@ Ir a EC2 > Instances > Launch Instances.
 Name and tags: Asignar el nombre web-server-{iniciales}-01.
 Application and OS Images (Amazon Machine Image): Seleccionar Amazon Linux 2023 AMI (arquitectura x86_64).
 
-[](./imagenes/aws.png)
+![](./imagenes/aws.png)
 
 
 Instance type: Seleccionar t2.micro o t3.micro
 Key pair (login): Crear una clave personal .pem para acceder por terminal.
 
-[](./imagenes/t3yclaves.png)
+![](./imagenes/t3yclaves.png)
 
 
 Network settings:
@@ -114,19 +114,19 @@ VPC: VPC por defecto.
 Auto-assign public IP: asegurarse de que esté en Enable.
 Firewall (security groups): seleccionar Select existing security group y marcar sg-servidor-web-asir.
 
-[](./imagenes/configuracion%20red.png)
+![](./imagenes/configuracion%20red.png)
 
 
 Advanced details:
 Desplegar la sección inferior.
 Metadata version: comprobar que esté seleccionado V2 only (token required) o V1 and V2 (token optional). Para forzar buenas prácticas, fijarlo en V2 only.
 
-[](./imagenes/solo%20v2.png)
+![](./imagenes/solo%20v2.png)
 
 
 Localizar el cuadro de texto User data al final de la página y pegar el script completo del Paso 2.
 
-[](./imagenes/script.png)
+![](./imagenes/script.png)
 
 
 Pulsar en Launch instance.
