@@ -31,9 +31,20 @@ Paso 3: Configuración del almacenamiento en el sistema operativo
 
 Conectarse a la instancia mediante SSH con el usuario ec2-user.
 Inspeccionar la topología de bloques detectada por el núcleo de Linux con lsblk. Deberías observar aquí el disco raíz (nvme0n1) con sus particiones y un nuevo disco sin particionar de 2 GB denominado generalmente nvme1n1.
-Verificar si el nuevo disco contiene ya algún sistema de archivos con udo file -s /dev/nvme1n1. Si la respuesta es /dev/nvme1n1: data, el disco está completamente vacío y requiere formateo.
-Formatear el dispositivo completo directamente con el sistema de archivos ext4 con la orden sudo mkfs -t ext4 /dev/nvme1n1
-Crear el directorio que servirá como punto de montaje (mkdir -p /mnt/datos) y asociar el disco sudo mount /dev/nvme1n1 /mnt/datos
+Verificar si el nuevo disco contiene ya algún sistema de archivos con 
+```
+sudo file -s /dev/nvme1n1.
+```
+
+Si la respuesta es: /dev/nvme1n1: data, el disco está completamente vacío y requiere formateo.
+Formatear el dispositivo completo directamente con el sistema de archivos ext4 con la orden
+```
+ sudo mkfs -t ext4 /dev/nvme1n1
+```
+Crear el directorio que servirá como punto de montaje (mkdir -p /mnt/datos) y asociar el disco 
+```
+sudo mount /dev/nvme1n1 /mnt/datos
+```
 
 
 ![](./imagenes/cloudshell.png)
