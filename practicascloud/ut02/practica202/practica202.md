@@ -74,3 +74,36 @@ Para comprobar que la sintaxis de /etc/fstab es correcta antes de reiniciar, des
 sudo umount /mnt/datos
  sudo mount -a
 ```
+
+
+![](./imagenes/mount%20a.png)
+
+
+5. En la consola de AWS, ir a EC2 > Instances.
+Seleccionar la instancia configurada, pulsar en Actions > Image and templates > Create image.
+Rellenar los campos requeridos:
+Image name: ami-servidor-completo-asir.
+Image description: Imagen con volumen EBS secundario montado.
+En la tabla Instance volume snapshot and disk settings, observar que AWS detecta automáticamente tanto el volumen raíz (/dev/xvda) como el volumen secundario recién conectado (/dev/sdf).
+Pulsar en Create image.
+Ir a la sección Images > AMIs en el menú izquierdo. El estado inicial será pending. El proceso tardará unos minutos mientras AWS genera los snapshots en S3; esperar a que el estado cambie a Available.
+
+
+![](./imagenes/iamgenamin.png)
+
+
+6. Con la AMI en estado Available, seleccionarla y hacer clic en el botón superior Launch instance from AMI.
+En el asistente de configuración:
+Name: servidor-clonado-asir.
+Instance type: t2.micro o t3.micro.
+Key pair: seleccionar tu par de claves.
+Network settings: asignar el mismo Security Group (sg-servidor-web-asir) y asegurar que Auto-assign public IP esté habilitado.
+En la sección Configure storage, verificar que la plantilla ya incluye los dos discos (el raíz de 8 GB y el secundario de 2 GB) heredados de la AMI.
+Pulsar en Launch instance.
+
+
+![](./imagenes/lanzarinstancia.png)
+
+Una vez la nueva máquina esté en estado Running, conectarse a ella mediante SSH usando su nueva IP pública: ssh -i "clave_privada.pem" ec2-user@<IP_PUBLICA_DEL_CLON>
+
+Verificar si el volumen secundario y los datos existen en la máquina clonada con los siguientes comandos. El disco secundario se habrá creado como un nuevo volumen EBS a partir del snapshot, y el sistema operativo lo habrá montado automáticamente en /mnt/datos durante el arranque gracias a la entrada clonada en /etc/fstab, conteniendo el archivo evidencia.txt íntegro.
