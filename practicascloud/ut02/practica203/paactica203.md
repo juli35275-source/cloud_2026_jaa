@@ -114,3 +114,82 @@ Target value: 50 (escalará si la media de CPU del grupo supera el 50%).
 Warmup period: 60 segundos. Pulsar en Next.
 Omitir notificaciones y etiquetas pulsando en Next hasta la pantalla final.
 Pulsar en Create Auto Scaling group.
+
+
+![](./imagenes/ejercicio5.png)
+
+
+6. Paso 6: Verificación del balanceo de carga
+Ir a EC2 > Instances. Observar cómo el ASG lanza automáticamente 2 instancias nuevas.
+
+
+![](./imagenes/instancias.png)
+
+
+Ir a Load Balancing > Target Groups > tg-web-asir > pestaña Targets.
+Esperar hasta que ambas instancias muestren el estado Healthy en el chequeo de salud.
+
+
+![](./imagenes/targets.png)
+
+
+Abrir una terminal en el equipo local y ejecutar un bucle para comprobar cómo el ALB reparte las peticiones entre los servidores de forma alterna (Round-Robin):
+``` ALB_DNS="alb-web-asir-123456789.us-east-1.elb.amazonaws.com"
+
+ for i in {1..10}; do
+ curl -s http://$ALB_DNS | grep -E "Instancia:|Zona de Disponibilidad:"
+ sleep 1
+ done 
+```
+
+```     
+    <p class="data">Instancia: <span class="highlight">i-02933bd0a916e72a9</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1b</span></p>
+         <p class="data">Instancia: <span class="highlight">i-02933bd0a916e72a9</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1b</span></p>
+         <p class="data">Instancia: <span class="highlight">i-0096afe7031d95a09</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1a</span></p>
+         <p class="data">Instancia: <span class="highlight">i-0096afe7031d95a09</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1a</span></p>
+         <p class="data">Instancia: <span class="highlight">i-02933bd0a916e72a9</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1b</span></p>
+         <p class="data">Instancia: <span class="highlight">i-02933bd0a916e72a9</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1b</span></p>
+         <p class="data">Instancia: <span class="highlight">i-0096afe7031d95a09</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1a</span></p>
+         <p class="data">Instancia: <span class="highlight">i-0096afe7031d95a09</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1a</span></p>
+         <p class="data">Instancia: <span class="highlight">i-02933bd0a916e72a9</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1b</span></p>
+         <p class="data">Instancia: <span class="highlight">i-0096afe7031d95a09</span></p>
+         <p class="data">Zona de Disponibilidad: <span class="highlight">us-east-1a</span></p>
+~ $ 
+```
+7. Paso 7: Prueba de estrés y validación del autoescalado
+Desde la consola de EC2, copiar la IP pública de una de las dos instancias en ejecución.
+Conectarse a ella por SSH ``` ssh -i "tu_clave.pem" ec2-user@<IP_PUBLICA_DE_UNA_INSTANCIA>```
+
+Ejecutar la herramienta stress (instalada en el User Data) para forzar el uso de la CPU al 100% durante 8 minutos:
+
+``` stress --cpu 2 --timeout 480s```
+
+Mientras el comando se ejecuta, abrir la consola de AWS en otra pestaña:
+Ir a CloudWatch > Alarms. Observar cómo la alarma generada por el ASG pasa del estado OK a In alarm.
+
+
+![](./imagenes/alarm.png)
+
+
+Ir a Auto Scaling Groups > asg-web-asir > pestaña Activity.
+Observar cómo el grupo detecta la sobrecarga y ejecuta la acción: Launching a new EC2 instance.
+El número de instancias en Instances pasará de 2 a 3 (o 4).
+
+
+![](./imagenes/newinstance.png)
+
+
+Tras expirar los 480 segundos del comando stress, la CPU bajará a valores mínimos.
+Esperar unos minutos y verificar en la pestaña Activity del ASG cómo se activa el proceso de reducción (Scale-In), terminando las instancias adicionales hasta regresar a la capacidad deseada de 2.
+
+
+![](./imagenes/comprobacionfinal.png)
