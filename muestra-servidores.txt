@@ -1,0 +1,4 @@
+ Informe de auditoria de sistemas ASIR
+ Servidor 1: Operativo en zona us-east-1a
+ Servidor 2: Operativo en zona us-east-1b
+ Base de datos: Sincronizada y sin errores criticos
